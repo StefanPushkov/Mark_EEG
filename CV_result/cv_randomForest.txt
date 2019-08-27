@@ -1,0 +1,4 @@
+Best Params: 
+{"bootstrap": true, "max_depth": 70, "max_features": "auto", "min_samples_leaf": 4, "min_samples_split": 10, "n_estimators": 400}
+ Best Accuracy: 
+{"bootstrap": true, "max_depth": 70, "max_features": "auto", "min_samples_leaf": 4, "min_samples_split": 10, "n_estimators": 400}
