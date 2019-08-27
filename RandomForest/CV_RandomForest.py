@@ -56,3 +56,5 @@ with open("../CV_result/cv_randomForest.txt", "w") as f:
     f.write('\nBest Accuracy: \n')
     f.write(json.dumps(best_r))
     f.close()
+
+print('Hyperparameters tuning for Random Forest Classifier is completed')
