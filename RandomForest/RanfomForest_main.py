@@ -9,20 +9,23 @@ from joblib import dump, load
 from DataPreparation.main_preparation import data_processing
 
 def RandomForest_fitting():
-    data_processing(cf.raw_data, 29)
+    # data_processing(cf.raw_data, 29)
     # Get csv data
     data = pd.read_csv("../" + cf.prepared_data)
     X = data.drop(['0'], axis=1)
-    y = data[['0']].values.ravel()
+    y = data[['0']]#.values.ravel()
 
     # Feature Scaling
     StdScaler = StandardScaler()
     X_scaled = StdScaler.fit_transform(X)
 
     # Splitting the dataset into the Training set and Test set
-    X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size = 0.25, random_state = 0)
+    X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size = 0.3, random_state = 0)
 
-
+    from sklearn.preprocessing import label_binarize
+    Y = label_binarize(Y_Train, classes=[0, 1, 2])
+    print(Y[:2, :2])
+    '''
     # Fitting the classifier into the Training set
     clf = RandomForestClassifier(n_estimators = 1000, min_samples_split=10, min_samples_leaf=1,
                                  max_features='sqrt', max_depth=70, bootstrap=False , random_state = 0)
@@ -46,7 +49,7 @@ def RandomForest_fitting():
     # Balanced Accuracy Score
     blnc = balanced_accuracy_score(y_test, pred) * 100
     print("balanced_accuracy_score: %0.6f %% ." % (blnc))
-
+    '''
 
 if __name__ == "__main__":
     RandomForest_fitting()
