@@ -10,12 +10,12 @@ data = pd.read_csv("../" + cf.prepared_data)
 X = data.drop(['0'], axis=1)
 y = data[['0']].values.ravel()
 
-# Splitting the dataset into the Training set and Test set
-X_Train, x_test, Y_Train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
-
 # Feature Scaling
 StdScaler = StandardScaler()
-X_Train = StdScaler.fit_transform(X_Train)
+X_scaled = StdScaler.fit_transform(X)
+
+# Splitting the dataset into the Training set and Test set
+X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=0)
 
 # Number of trees in random forest
 n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]

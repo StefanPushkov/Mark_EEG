@@ -13,7 +13,7 @@ def RandomForest_fitting():
     # Get csv data
     data = pd.read_csv("../" + cf.prepared_data)
     X = data.drop(['0'], axis=1)
-    y = data[['0']]#.values.ravel()
+    y = data[['0']].values.ravel()
 
     # Feature Scaling
     StdScaler = StandardScaler()
@@ -22,9 +22,7 @@ def RandomForest_fitting():
     # Splitting the dataset into the Training set and Test set
     X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size = 0.3, random_state = 0)
 
-    from sklearn.preprocessing import label_binarize
-    Y = label_binarize(Y_Train, classes=[0, 1, 2])
-    print(Y[:2, :2])
+
     '''
     # Fitting the classifier into the Training set
     clf = RandomForestClassifier(n_estimators = 1000, min_samples_split=10, min_samples_leaf=1,

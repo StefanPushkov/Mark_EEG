@@ -9,10 +9,12 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
 from sklearn.preprocessing import label_binarize
 import matplotlib.pyplot as plt
+import time
+from datetime import datetime
 
 def prediction(data=cf.prepared_data):
     model = load('../models/RandomForest_model.joblib')
-    data = pd.read_csv("../"+cf.prepared_data)
+    data = pd.read_csv("../"+data)
     data = data.loc[:100000]
     X = data.drop(['0'], axis=1)
     y = data[['0']]#.values.ravel()
@@ -24,6 +26,11 @@ def prediction(data=cf.prepared_data):
     Y = label_binarize(y, classes=[0, 1, 2])
     n_classes = Y.shape[1]
     X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, Y, test_size=0.25, random_state=0)
+
+    print('Prediction started')
+    start_time = time.time()  # Time counter
+    print(" Started at ", datetime.utcfromtimestamp(int(time.time())).strftime('%Y-%m-%d %H:%M:%S'))
+
 
     pred = model.predict_proba(x_test)
 
@@ -57,7 +64,8 @@ def prediction(data=cf.prepared_data):
     plt.title(
         'Average precision score, micro-averaged over all classes: AP={0:0.2f}'
             .format(average_precision["micro"]))
-    plt.show()
+    plt.savefig('../Plots/Avg_Prec_score.png')
+    # Evaluating accuracy using Accuracy and Balanced Accuracy Score metrics
     pred = model.predict(X)
     print('Accuracy metrics are evaluated')
 
@@ -73,7 +81,7 @@ def prediction(data=cf.prepared_data):
     # PLOT FOR EACH CLASS
     from itertools import cycle
     # setup plot details
-    colors = cycle(['navy', 'turquoise', 'darkorange', 'cornflowerblue', 'teal'])
+    colors = cycle(['navy', 'turquoise', 'darkorange'])
 
     plt.figure(figsize=(7, 8))
     f_scores = np.linspace(0.2, 0.8, num=4)
@@ -85,7 +93,7 @@ def prediction(data=cf.prepared_data):
         l = plt.plot(x[y >= 0], y[y >= 0], color='gray', alpha=0.2)
         plt.annotate('f1={0:0.1f}'.format(f_score), xy=(0.9, y[45] + 0.02))
 
-    lines.append(l)
+        lines.append(l)
     labels.append('iso-f1 curves')
     l = plt.plot(recall["micro"], precision["micro"], color='gold', lw=2)
     lines.append(l)
@@ -93,7 +101,7 @@ def prediction(data=cf.prepared_data):
                   ''.format(average_precision["micro"]))
 
     for i, color in zip(range(n_classes), colors):
-        l, = plt.plot(recall[i], precision[i], color=color, lw=2)
+        l = plt.plot(recall[i], precision[i], color=color, lw=2)
         lines.append(l)
         labels.append('Precision-recall for class {0} (area = {1:0.2f})'
                       ''.format(i, average_precision[i]))
@@ -106,7 +114,8 @@ def prediction(data=cf.prepared_data):
     plt.ylabel('Precision')
     plt.title('Extension of Precision-Recall curve to multi-class')
     plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14))
+    plt.savefig('../Plots/Prec_Rec_curve_multi.png')
 
     plt.show()
-
+    print("Plot and prediction completed: %s seconds " % (time.time() - start_time))
 prediction()
