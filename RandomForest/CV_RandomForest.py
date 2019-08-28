@@ -41,10 +41,10 @@ random_grid = {'n_estimators': n_estimators,
 
 clf = RandomForestClassifier(random_state=0)
 
-import multiprocessing
-cores = multiprocessing.cpu_count()-1
+# import multiprocessing
+# cores = multiprocessing.cpu_count()-1
 rf_random = RandomizedSearchCV(estimator = clf, param_distributions=random_grid,
-                               n_iter=20, cv=3, verbose=1, random_state=42, n_jobs=cores)
+                               n_iter=20, cv=3, verbose=1, random_state=42)
 
 # Fit the random search model
 rf_random.fit(X_Train, Y_Train)
