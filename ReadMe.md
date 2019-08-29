@@ -27,7 +27,7 @@ Best Accuracy:
 0.9806521739130435`
 
 
-###Plots ###
+### Plots ###
 1. Average precision score plot
 2. Extension of Precision-Recall curve to multi-class plot 
 
