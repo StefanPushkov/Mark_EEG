@@ -57,15 +57,16 @@ best_r = rf_random.best_score_
 
 print("Fitting time: %s seconds " % (time.time() - start_time))
 
+def cv_result(name:str):
+    import json
+    with open("../CV_result/cv_randomForest.txt", "w") as f:
+        f.write('Parameters used for Randomized grid search ' + name + '\'s dataset: \nn_iter: '+rf_random.n_iter + "\ncv: "+rf_random.cv)
+        f.write('')
+        f.write('Best Params: \n')
+        f.write(json.dumps(best_p))
+        f.write('\nBest Accuracy: \n')
+        f.write(json.dumps(best_r))
+        f.close()
 
-import json
-with open("../CV_result/cv_randomForest.txt", "w") as f:
-    f.write('Parameters used for Randomized grid search: \nn_iter: '+rf_random.n_iter + "\ncv: "+rf_random.cv)
-    f.write('')
-    f.write('Best Params: \n')
-    f.write(json.dumps(best_p))
-    f.write('\nBest Accuracy: \n')
-    f.write(json.dumps(best_r))
-    f.close()
-
+cv_result(name='Mark')
 print('Hyperparameters tuning for Random Forest Classifier is completed')

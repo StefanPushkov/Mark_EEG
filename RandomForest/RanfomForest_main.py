@@ -28,7 +28,7 @@ def RandomForest_fitting():
 
     # Fitting the classifier into the Training set
     # clf = RandomForestClassifier(n_estimators = 1000, min_samples_split=10, min_samples_leaf=1,
-    #                              max_features='sqrt', max_depth=70, bootstrap=False , random_state = 0)
+    #                              max_features='sqrt', max_depth=70, bootstrap=False , random_state = 0, verbose=10)
     # clf = TGBMClassifier(depth=70, n_trees=100)
     clf = SVC()
     print('RandomForest fitting...')
