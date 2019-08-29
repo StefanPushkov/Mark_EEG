@@ -5,6 +5,8 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import config as cf
 from sklearn.model_selection import train_test_split
+import time
+from datetime import datetime
 
 
 data = pd.read_csv("../" + cf.prepared_data)
@@ -44,16 +46,22 @@ clf = RandomForestClassifier(random_state=0)
 # import multiprocessing
 # cores = multiprocessing.cpu_count()-1
 rf_random = RandomizedSearchCV(estimator = clf, param_distributions=random_grid,
-                               n_iter=20, cv=3, verbose=1, random_state=42)
+                               n_iter=20, cv=3, verbose=10, random_state=42)
 
 # Fit the random search model
+start_time = time.time() # Time counter
+print("Started at ", datetime.utcfromtimestamp(int(time.time())).strftime('%Y-%m-%d %H:%M:%S'))
 rf_random.fit(X_Train, Y_Train)
 best_p = rf_random.best_params_
 best_r = rf_random.best_score_
 
+print("Fitting time: %s seconds " % (time.time() - start_time))
+
 
 import json
 with open("../CV_result/cv_randomForest.txt", "w") as f:
+    f.write('Parameters used for Randomized grid search: \nn_iter: '+rf_random.n_iter + "\ncv: "+rf_random.cv)
+    f.write('')
     f.write('Best Params: \n')
     f.write(json.dumps(best_p))
     f.write('\nBest Accuracy: \n')

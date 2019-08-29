@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 import config as cf
+from thundergbm import TGBMClassifier
+from thundersvm import SVC
 from joblib import dump, load
 from DataPreparation.main_preparation import data_processing
 
@@ -23,10 +25,12 @@ def RandomForest_fitting():
     X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size = 0.3, random_state = 0)
 
 
-    '''
+
     # Fitting the classifier into the Training set
-    clf = RandomForestClassifier(n_estimators = 1000, min_samples_split=10, min_samples_leaf=1,
-                                 max_features='sqrt', max_depth=70, bootstrap=False , random_state = 0)
+    # clf = RandomForestClassifier(n_estimators = 1000, min_samples_split=10, min_samples_leaf=1,
+    #                              max_features='sqrt', max_depth=70, bootstrap=False , random_state = 0)
+    # clf = TGBMClassifier(depth=70, n_trees=100)
+    clf = SVC()
     print('RandomForest fitting...')
     clf.fit(X_Train ,Y_Train)
 
@@ -35,7 +39,7 @@ def RandomForest_fitting():
     pred = clf.predict(x_test)
 
     # Model Saving
-    dump(clf, '../models/RandomForest_model.joblib')
+    # dump(clf, '../models/RandomForest_model.joblib')
 
     # Testing accuracy
     print('Accuracy metrics are evaluated')
@@ -47,7 +51,6 @@ def RandomForest_fitting():
     # Balanced Accuracy Score
     blnc = balanced_accuracy_score(y_test, pred) * 100
     print("balanced_accuracy_score: %0.6f %% ." % (blnc))
-    '''
 
 if __name__ == "__main__":
     RandomForest_fitting()
