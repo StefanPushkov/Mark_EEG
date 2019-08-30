@@ -4,6 +4,7 @@ import config as cf
 
 def auto_markup(filename: str):
     data =  pd.read_csv("../converted_data/29CSV.csv", dtype='unicode')
+    data.drop(data.tail(1).index, inplace=True) # Drop last line with NaN
     data_length = data.shape[0]
     data = data.loc[2:]
 

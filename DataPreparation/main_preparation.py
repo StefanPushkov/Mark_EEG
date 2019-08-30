@@ -2,8 +2,9 @@ from DataPreparation.txt_to_csv import text_to_csv
 from DataPreparation.auto_markup import auto_markup
 from DataPreparation.to_txt import convert_to_txt
 from DataPreparation.hex_to_dec import hex_to_dec
+import config as cf
 
-def data_processing(raw_data: str, num_new:int):
+def data_processing(raw_data: str, num_new=None):
     print('Data processing started')
     # Function txt_to_csv returns '../converted_data/{0}CSV.csv'.format(num)
     csv29 = text_to_csv(raw_data, num_new)
@@ -18,7 +19,8 @@ def data_processing(raw_data: str, num_new:int):
 
 
     # Function hex_to_dec returns 'decimal{0}.csv'.format(num)
-    dec29 = hex_to_dec(txt29)
+    hex_to_dec(txt29)
     print('Data processing ended')
 
 # Merging to one
+data_processing(raw_data=cf.raw_data, num_new='2A')

@@ -15,7 +15,7 @@ from datetime import datetime
 def prediction(data=cf.prepared_data):
     model = load('../models/RandomForest_model.joblib')
     data = pd.read_csv("../"+data)
-    data = data.loc[:100000]
+    data = data.loc[:]
     X = data.drop(['0'], axis=1)
     y = data[['0']]#.values.ravel()
     X = np.c_[X]
@@ -71,7 +71,7 @@ def prediction(data=cf.prepared_data):
 
     # Accuracy
     accu_percent = accuracy_score(y, pred) * 100
-    print("Accuracy obtained over the whole training set is %0.6f %% ." % (accu_percent))
+    print("Accuracy obtained over the whole test set is %0.6f %% ." % (accu_percent))
 
     # Balanced Accuracy Score
     blnc = balanced_accuracy_score(y, pred) * 100
@@ -116,6 +116,6 @@ def prediction(data=cf.prepared_data):
     plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14))
     plt.savefig('../Plots/Prec_Rec_curve_multi.png')
 
-    plt.show()
+
     print("Plot and prediction completed: %s seconds " % (time.time() - start_time))
 prediction()
