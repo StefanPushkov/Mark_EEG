@@ -2,7 +2,7 @@ from joblib import dump, load
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 import config as cf
 from sklearn.metrics import precision_recall_curve
@@ -15,7 +15,6 @@ from datetime import datetime
 def prediction(data=cf.prepared_data):
     model = load('../models/RandomForest_model.joblib')
     data = pd.read_csv("../"+data)
-    data = data.loc[:]
     X = data.drop(['0'], axis=1)
     y = data[['0']]#.values.ravel()
     X = np.c_[X]
@@ -23,16 +22,16 @@ def prediction(data=cf.prepared_data):
     StdScaler = StandardScaler()
     X_scaled = StdScaler.fit_transform(X)
 
-    Y = label_binarize(y, classes=[0, 1, 2])
-    n_classes = Y.shape[1]
-    X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, Y, test_size=0.25, random_state=0)
+    Y_bin = label_binarize(y, classes=[0, 1, 2])
+    n_classes = y.shape[1]
+    # X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, Y, test_size=0.99, random_state=0)
 
     print('Prediction started')
     start_time = time.time()  # Time counter
     print(" Started at ", datetime.utcfromtimestamp(int(time.time())).strftime('%Y-%m-%d %H:%M:%S'))
 
 
-    pred = model.predict_proba(x_test)
+    pred = model.predict_proba(X_scaled)
 
     # Plot the micro-averaged Precision-Recall curve
     # For each class
@@ -40,14 +39,14 @@ def prediction(data=cf.prepared_data):
     recall = dict()
     average_precision = dict()
     for i in range(n_classes):
-        precision[i], recall[i], _ = precision_recall_curve(y_test[:, i],
+        precision[i], recall[i], _ = precision_recall_curve(Y_bin[:, i],
                                                             pred[:, i])
-        average_precision[i] = average_precision_score(y_test[:, i], pred[:, i])
+        average_precision[i] = average_precision_score(Y_bin[:, i], pred[:, i])
 
     # A "micro-average": quantifying score on all classes jointly
-    precision["micro"], recall["micro"], _ = precision_recall_curve(y_test.ravel(),
+    precision["micro"], recall["micro"], _ = precision_recall_curve(Y_bin.ravel(),
                                                                     pred.ravel())
-    average_precision["micro"] = average_precision_score(y_test, pred,
+    average_precision["micro"] = average_precision_score(Y_bin, pred,
                                                          average="micro")
     print('Average precision score, micro-averaged over all classes: {0:0.2f}'
           .format(average_precision["micro"]))
@@ -66,7 +65,7 @@ def prediction(data=cf.prepared_data):
             .format(average_precision["micro"]))
     plt.savefig('../Plots/Avg_Prec_score.png')
     # Evaluating accuracy using Accuracy and Balanced Accuracy Score metrics
-    pred = model.predict(X)
+    pred = model.predict(X_scaled)
     print('Accuracy metrics are evaluated')
 
     # Accuracy
@@ -77,6 +76,9 @@ def prediction(data=cf.prepared_data):
     blnc = balanced_accuracy_score(y, pred) * 100
     print("balanced_accuracy_score: %0.6f %% ." % (blnc))
 
+    # Confusion matrix
+    cm = confusion_matrix(y, pred)
+    print("Conf_matrix: ", cm)
 
     # PLOT FOR EACH CLASS
     from itertools import cycle
