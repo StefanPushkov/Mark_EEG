@@ -6,7 +6,7 @@ import numpy as np
 import config as cf
 from sklearn.model_selection import train_test_split
 
-data = pd.read_csv("../" + cf.prepared_data)
+data = pd.read_csv(cf.prepared_data_15min)
 X = data.drop(['0'], axis=1)
 y = data[['0']].values.ravel()
 
@@ -27,18 +27,19 @@ gamma = [1/4000000, 1/2000000, 1/400000, 1/200000, 1/40000, 1/20000, 1/4000, 1/2
 
 random_grid = {'C': C,
                'kernel': kernel,
-               'gamma': gamma,}
+               'gamma': gamma}
 
 clf = svm.SVC(random_state=0)
 
 rf_random = RandomizedSearchCV(estimator = clf, param_distributions=random_grid,
-                               n_iter=20, cv=3, verbose=1, random_state=0, n_jobs=-1)
+                               n_iter=4, cv=2, verbose=10, random_state=0, n_jobs=-1)
 
 # Fit the random search model
 rf_random.fit(X_Train, Y_Train)
+
 best_p = rf_random.best_params_
 best_r = rf_random.best_score_
-
+print(best_p, best_r)
 
 import json
 with open("../CV_result/cv_SVM.txt", "w") as f:

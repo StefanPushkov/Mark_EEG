@@ -28,7 +28,7 @@ def compute_SVC(X_train, y_train):
     shrinking = True
     tol = 0.001
     verbose = False
-    c = svm.SVC(kernel='linear')
+    c = svm.SVC(kernel='linear', gamma=0.005, C=0.05, verbose=10)
     c.fit(X_train, y_train)
     return c
 
@@ -47,20 +47,8 @@ def compute_confusion_matrix(test_f, test_l, c):
     x = confusion_matrix(test_l, pred)
     return x
 
-# Function to split the data
-def split_data(data_file, percent):
-    tot = len(data_file)
-    req_xt = int((float(percent)/100)*(tot))
-    xt_get = []
-    for s in range(0,(req_xt-1)):
-        xt_get.append(data_file[s])
-    yt_get = []
-    for d in range(req_xt, tot):
-        yt_get.append(data_file[d])
-    return xt_get, yt_get
 
-e
-data = pd.read_csv("../"+cf.prepared_data)
+data = pd.read_csv(cf.prepared_data_15min)
 print(data.head())
 # data = data.loc[:75055]
 
