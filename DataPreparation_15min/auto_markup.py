@@ -34,7 +34,7 @@ def auto_markup(filename: str):
 
         left_interval = list(zip(left_down, left_up))
         for i in left_interval:
-            set_class(start=i[0]-cf.margin_for_markup_15min, stop=i[1], classname=1)
+            set_class(start=i[0]-cf.margin_for_markup_15min, stop=i[0], classname=1)
 
 
     def set_right_hand():
@@ -52,7 +52,7 @@ def auto_markup(filename: str):
 
         left_interval = list(zip(right_down, right_up))
         for i in left_interval:
-            set_class(start=i[0]-cf.margin_for_markup_15min, stop=i[1], classname=2)
+            set_class(start=i[0]-cf.margin_for_markup_15min, stop=i[0], classname=2)
 
     set_left_hand()
     set_right_hand()

@@ -22,8 +22,10 @@ def prediction(data=cf.prepared_data_3min):
     StdScaler = StandardScaler()
     X_scaled = StdScaler.fit_transform(X)
 
+
     Y_bin = label_binarize(y, classes=[0, 1, 2])
     n_classes = y.shape[1]
+    print()
     # X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, Y, test_size=0.99, random_state=0)
 
     print('Prediction started')
@@ -83,7 +85,7 @@ def prediction(data=cf.prepared_data_3min):
     # PLOT FOR EACH CLASS
     from itertools import cycle
     # setup plot details
-    colors = cycle(['navy', 'turquoise', 'darkorange'])
+    colors = cycle(['navy', 'turquoise', 'darkorange', 'cornflowerblue', 'teal'])
 
     plt.figure(figsize=(7, 8))
     f_scores = np.linspace(0.2, 0.8, num=4)
