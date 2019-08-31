@@ -5,15 +5,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 import config as cf
-from thundergbm import TGBMClassifier
-from thundersvm import SVC
 from joblib import dump, load
-from DataPreparation.main_preparation import data_processing
+# from DataPreparation.main_preparation import data_processing
 
 def RandomForest_fitting():
     # data_processing(cf.raw_data, 29)
     # Get csv data
-    data = pd.read_csv("../" + cf.prepared_data)
+    data = pd.read_csv(cf.prepared_data_15min)
     X = data.drop(['0'], axis=1)
     y = data[['0']].values.ravel()
 
@@ -22,24 +20,22 @@ def RandomForest_fitting():
     X_scaled = StdScaler.fit_transform(X)
 
     # Splitting the dataset into the Training set and Test set
-    X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size = 0.3, random_state = 0)
+    X_Train, x_test, Y_Train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=0)
 
 
 
     # Fitting the classifier into the Training set
-    # clf = RandomForestClassifier(n_estimators = 1000, min_samples_split=10, min_samples_leaf=1,
-    #                              max_features='sqrt', max_depth=70, bootstrap=False , random_state = 0, verbose=10)
-    # clf = TGBMClassifier(depth=70, n_trees=100)
-    clf = SVC()
-    print('RandomForest fitting...')
-    clf.fit(X_Train ,Y_Train)
+    clf = RandomForestClassifier(n_estimators=600, min_samples_split=2, min_samples_leaf=2,
+                                 max_features='auto', max_depth=60, bootstrap=False, random_state=0, verbose=10, n_jobs=8)
 
+    print('RandomForest fitting...')
+    clf.fit(X_Train, Y_Train)
 
     # Predicting the test set results
     pred = clf.predict(x_test)
 
     # Model Saving
-    # dump(clf, '../models/RandomForest_model.joblib')
+    dump(clf, '../models/RandomForest_model_15min.joblib')
 
     # Testing accuracy
     print('Accuracy metrics are evaluated')

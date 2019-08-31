@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 import time
 from datetime import datetime
 
-def prediction(data=cf.prepared_data):
-    model = load('../models/RandomForest_model.joblib')
-    data = pd.read_csv("../"+data)
+def prediction(data=cf.prepared_data_3min):
+    model = load('../models/RandomForest_model_15min.joblib')
+    data = pd.read_csv(data)
     X = data.drop(['0'], axis=1)
     y = data[['0']]#.values.ravel()
     X = np.c_[X]
@@ -120,4 +120,5 @@ def prediction(data=cf.prepared_data):
 
 
     print("Plot and prediction completed: %s seconds " % (time.time() - start_time))
-prediction()
+
+prediction(cf.prepared_data_3min)
